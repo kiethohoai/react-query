@@ -1,15 +1,14 @@
-import Table from 'react-bootstrap/Table';
-import { useState, forwardRef } from 'react';
-import Button from 'react-bootstrap/Button';
-import UserCreateModal from './modal/user.create.modal';
-import UserEditModal from './modal/user.edit.modal';
-import UserDeleteModal from './modal/user.delete.modal';
-import UsersPagination from './pagination/users.pagination';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Popover from 'react-bootstrap/Popover';
+import Table from "react-bootstrap/Table";
+import { useState, forwardRef } from "react";
+import Button from "react-bootstrap/Button";
+import UserCreateModal from "./modal/user.create.modal";
+import UserEditModal from "./modal/user.edit.modal";
+import UserDeleteModal from "./modal/user.delete.modal";
+import UsersPagination from "./pagination/users.pagination";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
 
 function UsersTable() {
-
     const [isOpenCreateModal, setIsOpenCreateModal] = useState<boolean>(false);
 
     const [isOpenUpdateModal, setIsOpenUpdateModal] = useState<boolean>(false);
@@ -19,37 +18,36 @@ function UsersTable() {
 
     const users = [
         {
-            "id": 1,
-            "name": "Eric",
-            "email": "eric@gmail.com"
+            id: 1,
+            name: "Hồ Hoài Kiệt",
+            email: "hohoaikiet@gmail.com",
         },
         {
-            "id": 2,
-            "name": "Hỏi Dân IT",
-            "email": "hoidanit@gmail.com"
+            id: 2,
+            name: "Hồ Hoài Sản",
+            email: "hohoaisan@gmail.com",
         },
         {
-            "id": 3,
-            "name": "Hỏi Dân IT",
-            "email": "admin@gmail.com"
-        }
-    ]
+            id: 3,
+            name: "Hồ Hoài Anh",
+            email: "hohoaianh@gmail.com",
+        },
+    ];
 
     const handleEditUser = (user: any) => {
         setDataUser(user);
         setIsOpenUpdateModal(true);
-    }
+    };
 
     const handleDelete = (user: any) => {
         setDataUser(user);
         setIsOpenDeleteModal(true);
-    }
+    };
 
     const PopoverComponent = forwardRef((props: any, ref: any) => {
         const { id } = props;
 
         return (
-
             <Popover ref={ref} {...props}>
                 <Popover.Header as="h3">Detail User</Popover.Header>
                 <Popover.Body>
@@ -58,17 +56,16 @@ function UsersTable() {
                     <div>Email = ?</div>
                 </Popover.Body>
             </Popover>
-        )
-    })
-
+        );
+    });
 
     return (
         <>
             <div style={{ display: "flex", justifyContent: "space-between", margin: "15px 0" }}>
                 <h4>Table Users</h4>
-                <Button variant="primary"
-                    onClick={() => setIsOpenCreateModal(true)}
-                >Add New</Button>
+                <Button variant="primary" onClick={() => setIsOpenCreateModal(true)}>
+                    Add New
+                </Button>
             </div>
             <Table striped bordered hover>
                 <thead>
@@ -80,44 +77,38 @@ function UsersTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {users?.map(user => {
+                    {users?.map((user) => {
                         return (
                             <tr key={user.id}>
-                                <OverlayTrigger trigger="click" placement="right"
+                                <OverlayTrigger
+                                    trigger="click"
+                                    placement="right"
                                     rootClose
                                     overlay={<PopoverComponent id={user.id} />}
                                 >
-                                    <td><a href='#'>{user.id}</a></td>
+                                    <td>
+                                        <a href="#">{user.id}</a>
+                                    </td>
                                 </OverlayTrigger>
 
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>
-                                    <Button
-                                        variant="warning"
-                                        onClick={() => handleEditUser(user)}
-                                    >
+                                    <Button variant="warning" onClick={() => handleEditUser(user)}>
                                         Edit
-                                    </Button>&nbsp;&nbsp;&nbsp;
-                                    <Button
-                                        variant="danger"
-                                        onClick={() => handleDelete(user)}
-                                    >
+                                    </Button>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <Button variant="danger" onClick={() => handleDelete(user)}>
                                         Delete
                                     </Button>
                                 </td>
                             </tr>
-                        )
+                        );
                     })}
                 </tbody>
             </Table>
-            <UsersPagination
-                totalPages={0}
-            />
-            <UserCreateModal
-                isOpenCreateModal={isOpenCreateModal}
-                setIsOpenCreateModal={setIsOpenCreateModal}
-            />
+            <UsersPagination totalPages={0} />
+            <UserCreateModal isOpenCreateModal={isOpenCreateModal} setIsOpenCreateModal={setIsOpenCreateModal} />
 
             <UserEditModal
                 isOpenUpdateModal={isOpenUpdateModal}
