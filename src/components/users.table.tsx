@@ -65,7 +65,7 @@ function UsersTable() {
     error,
     data: users,
   } = useQuery({
-    queryKey: ["repoData"],
+    queryKey: ["fetchUsers"],
     queryFn: () =>
       fetch("http://localhost:8000/users").then((res) => res.json()),
   });
