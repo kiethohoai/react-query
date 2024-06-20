@@ -48,29 +48,46 @@ function UsersTable() {
   const PopoverComponent = forwardRef((props: any, ref: any) => {
     const { id } = props;
 
+    // fetching data by React-Query
+    const { isPending, error, data } = useQuery({
+      queryKey: ["fetchDetailUser", id],
+      queryFn: () => fetch(`http://localhost:8000/users/${id}`).then((res) => res.json()),
+    });
+
+    const getBody = () => {
+      if (isPending) return "Loading Detail...";
+      if (error) return "An error has occurred: " + error.message;
+      if (data) {
+        return (
+          <>
+            <div>ID = {id}</div>
+            <div>Name = {data.name}</div>
+            <div>Email = {data.email}</div>
+          </>
+        );
+      }
+    };
+
     return (
       <Popover ref={ref} {...props}>
         <Popover.Header as="h3">Detail User</Popover.Header>
-        <Popover.Body>
-          <div>ID = {id}</div>
-          <div>Name = ?</div>
-          <div>Email = ?</div>
-        </Popover.Body>
+        <Popover.Body>{getBody()}</Popover.Body>
       </Popover>
     );
   });
 
+  // fetching data by React-Query
   const {
     isPending,
     error,
     data: users,
   } = useQuery({
     queryKey: ["fetchUsers"],
-    queryFn: () =>
-      fetch("http://localhost:8000/users").then((res) => res.json()),
+    queryFn: () => fetch("http://localhost:8000/users").then((res) => res.json()),
   });
 
   if (isPending) return "Loading...";
+  if (error) return "An error has occurred: " + error.message;
 
   return (
     <>
@@ -96,16 +113,11 @@ function UsersTable() {
           </tr>
         </thead>
         <tbody>
-          {/* $ts-ignore */}
+          {/* @ts-ignore */}
           {users?.map((user) => {
             return (
               <tr key={user.id}>
-                <OverlayTrigger
-                  trigger="click"
-                  placement="right"
-                  rootClose
-                  overlay={<PopoverComponent id={user.id} />}
-                >
+                <OverlayTrigger trigger="click" placement="right" rootClose overlay={<PopoverComponent id={user.id} />}>
                   <td>
                     <a href="#">{user.id}</a>
                   </td>
@@ -114,10 +126,7 @@ function UsersTable() {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
-                  <Button
-                    variant="warning"
-                    onClick={() => handleEditUser(user)}
-                  >
+                  <Button variant="warning" onClick={() => handleEditUser(user)}>
                     Edit
                   </Button>
                   &nbsp;&nbsp;&nbsp;
@@ -131,10 +140,7 @@ function UsersTable() {
         </tbody>
       </Table>
       <UsersPagination totalPages={0} />
-      <UserCreateModal
-        isOpenCreateModal={isOpenCreateModal}
-        setIsOpenCreateModal={setIsOpenCreateModal}
-      />
+      <UserCreateModal isOpenCreateModal={isOpenCreateModal} setIsOpenCreateModal={setIsOpenCreateModal} />
 
       <UserEditModal
         isOpenUpdateModal={isOpenUpdateModal}
