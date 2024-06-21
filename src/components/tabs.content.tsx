@@ -6,16 +6,16 @@ import BlogsTable from "./blogs.table";
 
 function TabsContent() {
     return (
-        <Container>
-            <Tabs defaultActiveKey="user" id="uncontrolled-tab-example" className="mb-3 mt-3">
-                <Tab eventKey="user" title="Users">
-                    <UsersTable />
-                </Tab>
-                <Tab eventKey="blog" title="Blogs">
-                    <BlogsTable />
-                </Tab>
-            </Tabs>
-        </Container>
+      <Container>
+        <Tabs defaultActiveKey="blog" id="uncontrolled-tab-example" className="mb-3 mt-3">
+          <Tab eventKey="user" title="Users">
+            <UsersTable />
+          </Tab>
+          <Tab eventKey="blog" title="Blogs">
+            <BlogsTable />
+          </Tab>
+        </Tabs>
+      </Container>
     );
 }
 

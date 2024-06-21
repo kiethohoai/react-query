@@ -68,7 +68,7 @@ const UserCreateModal = (props: any) => {
       >
         <Modal.Header closeButton>
           <Modal.Title>Add A New User</Modal.Title>
-        </Modal.Header>
+        </Modal.Header> 
         <Modal.Body>
           <FloatingLabel label="Email" className="mb-3">
             <Form.Control value={email} onChange={(e) => setEmail(e.target.value)} type="text" />
