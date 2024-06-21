@@ -1,9 +1,11 @@
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 
 interface IUser {
   name: string;
@@ -14,6 +16,7 @@ const UserCreateModal = (props: any) => {
   const { isOpenCreateModal, setIsOpenCreateModal } = props;
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async (payload: IUser) => {
@@ -29,6 +32,13 @@ const UserCreateModal = (props: any) => {
       });
       return res.json();
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["fetchUsers"] });
+      toast.success("User Created!");
+      setIsOpenCreateModal(false);
+      setEmail("");
+      setName("");
+    },
   });
 
   const handleSubmit = () => {
@@ -42,9 +52,9 @@ const UserCreateModal = (props: any) => {
     }
 
     //call api => call react query => create user
-    console.log("email, name: ", { email, name });
-
-    mutation.mutate({ email, name });
+    if (email && name) {
+      mutation.mutate({ email, name });
+    }
   };
 
   return (
@@ -71,7 +81,15 @@ const UserCreateModal = (props: any) => {
           <Button variant="warning" onClick={() => setIsOpenCreateModal(false)} className="mr-2">
             Cancel
           </Button>
-          <Button onClick={() => handleSubmit()}>Save</Button>
+
+          {mutation.isPending ? (
+            <Button variant="primary" disabled>
+              <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+              <span style={{ marginLeft: "4px" }}>Creatting</span>
+            </Button>
+          ) : (
+            <Button onClick={() => handleSubmit()}>Save</Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>
